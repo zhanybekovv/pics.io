@@ -1,9 +1,10 @@
 import React, { FC, useState } from 'react';
-import Widget from '../Widget';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { createBrowserHistory } from 'history';
+import Widget from '../Widget';
 import { Props, Checked } from './types';
-import './index.css';
 import { mock } from './mock';
+import './index.css';
 
 const reorder = (list: any, startIndex: any, endIndex: any): Props[] => {
 	const result = Array.from(list) as Props[];
@@ -30,6 +31,7 @@ const getItemStyle = (isDragging: any, draggableStyle: any) => ({
 
 const Widgets: FC<Checked> = (props: Checked) => {
 	const [list, setList] = useState({ items: mock });
+	const history = createBrowserHistory();
 	const { checked } = props;
 	const onDragEnd = (result: any) => {
 		if (!result.destination) {

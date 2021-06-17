@@ -4,6 +4,7 @@ import { Props } from './types';
 // eslint-disable-next-line react/display-name
 const Widget = forwardRef<HTMLInputElement, Props>((props, ref) => {
 	const [checked, setChecked] = useState(true);
+	console.log('props', props);
 	const handleChange = () => {
 		setChecked(!checked);
 	};
