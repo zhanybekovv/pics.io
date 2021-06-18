@@ -1,7 +1,6 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { createBrowserHistory } from 'history';
-import qs from 'qs';
 import Widget from '../Widget';
 import { Props, Checked } from './types';
 import { mock } from './mock';
@@ -32,7 +31,6 @@ const getItemStyle = (isDragging: any, draggableStyle: any) => ({
 
 const Widgets: FC<Checked> = (props: Checked) => {
 	const [list, setList] = useState({ items: mock });
-	const [his, setHist] = useState({} as any);
 	const history = createBrowserHistory();
 	const { checked } = props;
 	const onDragEnd = (result: any) => {
@@ -45,39 +43,9 @@ const Widgets: FC<Checked> = (props: Checked) => {
 			result.source.index,
 			result.destination.index
 		);
-		const res = Object.keys(his);
-		const a = res.map(i => i + '=' + his[i]);
-		history.push(`?${a}`);
 		setList({ items });
 	};
 
-	useEffect(() => {
-		if (history.location.search.length !== 0) {
-			console.log('llll');
-			const res = {} as any;
-			list.items.forEach(i => {
-				res[i.id] = i.checked;
-			});
-			setHist(res);
-		}
-	}, []);
-
-	useEffect(() => {
-		const filterParams = history.location.search.substr(1).split(',');
-		const filtersFromParams = filterParams.map(i => qs.parse(i));
-		console.log('aaa', filtersFromParams);
-	});
-
-	useEffect(() => {
-		if (history.location.search.length > 0) {
-			console.log('lol');
-			const res = Object.keys(his);
-			const a = res.map(i => i + '=' + his[i]);
-			history.push(`?${a}`);
-		}
-	});
-
-	console.log('fgfg', his);
 	return (
 		<DragDropContext onDragEnd={onDragEnd}>
 			<Droppable droppableId='droppable'>
@@ -100,8 +68,6 @@ const Widgets: FC<Checked> = (props: Checked) => {
 											provided.draggableProps.style
 										)}
 										content={name}
-										setHist={setHist}
-										his={his}
 										edit={checked}
 									/>
 								)}
