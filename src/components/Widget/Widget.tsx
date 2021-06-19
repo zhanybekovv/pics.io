@@ -6,14 +6,18 @@ const Widget = forwardRef<HTMLInputElement, Props>((props, ref) => {
 	const [checked, setChecked] = useState<boolean>(props.content.checked);
 	const handleChange = () => {
 		setChecked(!checked);
-		const res = {} as any;
-		props.his[props.content.id] = !checked;
+		// const res = {} as any;
+		// props.his[props.content.id] = !checked;
+		// props.setHist(props.his);
+		const res = props.content;
+		res.checked = !checked;
+		props.his.items[props.index] = res;
 		props.setHist(props.his);
 	};
 	return (
 		<div>
 			{!props.edit ? (
-				checked && (
+				!checked && (
 					<div ref={ref} {...props}>
 						<label
 							style={{

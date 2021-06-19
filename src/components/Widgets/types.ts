@@ -6,4 +6,5 @@ export type Props = {
 
 export type Checked = {
 	checked: boolean;
+	handleEdit: Function;
 };

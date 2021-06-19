@@ -31,7 +31,7 @@ const Main: FC<Props> = (props: Props) => {
 					<img src={Info} style={{ width: '100%' }} />
 				</div>
 			</div>
-			{show && <Widgets checked={edit} />}
+			{show && <Widgets checked={edit} handleEdit={handleEdit} />}
 			{show &&
 				(!edit ? (
 					<div
@@ -40,9 +40,7 @@ const Main: FC<Props> = (props: Props) => {
 					>
 						Edit Widgets
 					</div>
-				) : (
-					<button onClick={handleEdit}> Done </button>
-				))}
+				) : null)}
 		</div>
 	);
 };

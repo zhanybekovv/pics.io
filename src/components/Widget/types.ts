@@ -10,4 +10,5 @@ export type Props = {
 	readonly edit: boolean;
 	readonly setHist: Function;
 	readonly his: any;
+	readonly index: number;
 };
