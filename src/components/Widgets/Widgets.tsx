@@ -3,6 +3,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { createBrowserHistory } from 'history';
 import qs from 'qs';
 import Widget from '../Widget';
+import SelectionButton from '../SelectionButton';
 import { Props, Checked } from './types';
 import { mock } from './mock';
 import './index.css';
@@ -33,7 +34,7 @@ const getItemStyle = (isDragging: any, draggableStyle: any) => ({
 
 const Widgets: FC<Checked> = (props: Checked) => {
 	const [list, setList] = useState({ items: mock });
-	const [newList, setNewList] = useState({});
+	const [selectedCount, setSelectedCount] = useState<number>(0);
 	const history = createBrowserHistory();
 	const { checked, handleEdit } = props;
 	const onDragEnd = (result: any) => {
@@ -58,28 +59,55 @@ const Widgets: FC<Checked> = (props: Checked) => {
 	// 		res[i.id] = i.checked;
 	// 	});
 	// }, []);
-	const check = (key: any) => {
-		console.log('ghg');
+	const selectAll = () => {
+		const res = list.items.map(i => {
+			const newArr = i;
+			newArr.checked = true;
+			return newArr;
+		});
+		console.log('selectAll', res);
+		setSelectedCount(res.length);
+		setList({ items: res });
+		// done();
+	};
+
+	const disselectAll = () => {
+		const res = list.items.map(i => {
+			const newArr = i;
+			newArr.checked = false;
+			return newArr;
+		});
+		console.log('disselectAll', res);
+		setSelectedCount(0);
+		setList({ items: res });
+		// done();
 	};
 	useEffect(() => {
 		const filterParams = history.location.search.substr(1).split(',');
-		console.log('rrr', filterParams);
 		if (filterParams.length > 1) {
 			const rr = {} as any;
 			const filtersFromParams = filterParams.map(i => qs.parse(i));
-			for (let i = 0; i < filtersFromParams.length; i++) {
-				const r = Object.entries(filtersFromParams[i]);
-				if (r.length > 0) {
-					rr[r[0][0]] = r[0][1];
-				}
-			}
-			const res = [] as any;
+
 			for (let i = 0; i < list.items.length; i++) {
-				const a = list.items;
-				a[i].checked = rr[a[i].id];
-				res.push(a[i]);
+				const r = Object.values(list.items[i]) as string[];
+				rr[r[0]] = r[1];
 			}
-			setList({ items: res });
+
+			const newList = [] as any;
+
+			for (let i = 0; i < filtersFromParams.length; i++) {
+				const a = Object.entries(filtersFromParams[i]);
+				const res = {} as any;
+				res['id'] = a[0][0];
+				res['content'] = rr[a[0][0]];
+				res['checked'] = a[0][1] === 'true';
+				newList.push(res);
+			}
+
+			console.log('aaa', newList);
+			setList({ items: newList });
+
+			setSelectedCount(newList.filter((i: any) => i.checked).length);
 		}
 	}, []);
 
@@ -88,10 +116,21 @@ const Widgets: FC<Checked> = (props: Checked) => {
 		const r = list.items.map(i => i.id + '=' + i.checked);
 		history.push(`?${r}`);
 	};
-	console.log('ggg', list);
+
+	const handleSelection = () => {
+		console.log('fff');
+	};
 
 	return (
 		<div>
+			{checked && (
+				<SelectionButton
+					selectedCount={selectedCount}
+					lengthOfWidgets={list.items.length}
+					selectAll={selectAll}
+					disselectAll={disselectAll}
+				/>
+			)}
 			<DragDropContext onDragEnd={onDragEnd}>
 				<Droppable droppableId='droppable'>
 					{(provided, snapshot) => (
@@ -112,11 +151,15 @@ const Widgets: FC<Checked> = (props: Checked) => {
 												snapshot.isDragging,
 												provided.draggableProps.style
 											)}
+											key={name.id}
 											content={name}
 											setHist={setList}
 											his={list}
 											edit={checked}
 											index={index}
+											setSelectedCount={setSelectedCount}
+											selectAll={selectAll}
+											disselectAll={disselectAll}
 										/>
 									)}
 								</Draggable>
