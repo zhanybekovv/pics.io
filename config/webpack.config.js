@@ -50,7 +50,7 @@ const sassModuleRegex = /\.module\.(scss|sass)$/;
 
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
-module.exports = function (webpackEnv) {
+module.exports = function(webpackEnv) {
 	const isEnvDevelopment = webpackEnv === 'development';
 	const isEnvProduction = webpackEnv === 'production';
 
@@ -72,7 +72,7 @@ module.exports = function (webpackEnv) {
 				loader: MiniCssExtractPlugin.loader,
 				// css is located in `static/css`, use '../../' to locate index.html folder
 				// in production `paths.publicUrlOrPath` can be a relative path
-				options: paths.publicUrlOrPath.startsWith('.') ? { publicPath: '../../' } : {},
+				options: paths.publicUrlOrPath.startsWith('.') ? { publicPath: '../' } : {},
 			},
 			{
 				loader: require.resolve('css-loader'),
@@ -128,9 +128,7 @@ module.exports = function (webpackEnv) {
 		// Stop compilation early in production
 		bail: isEnvProduction,
 		devtool: isEnvProduction
-			? shouldUseSourceMap
-				? 'source-map'
-				: false
+			? shouldUseSourceMap ? 'source-map' : false
 			: isEnvDevelopment && 'cheap-module-source-map',
 		// These are the "entry points" to our application.
 		// This means they will be the "root" imports that are included in JS bundle.
@@ -159,7 +157,9 @@ module.exports = function (webpackEnv) {
 			pathinfo: isEnvDevelopment,
 			// There will be one main bundle, and one file per asynchronous chunk.
 			// In development, it does not produce real files.
-			filename: isEnvProduction ? 'static/js/[name].[contenthash:8].js' : isEnvDevelopment && 'static/js/bundle.js',
+			filename: isEnvProduction
+				? 'static/js/[name].[contenthash:8].js'
+				: isEnvDevelopment && 'static/js/bundle.js',
 			// TODO: remove this when upgrading to webpack 5
 			futureEmitAssets: true,
 			// There are also additional JS chunk files if you use code splitting.
@@ -237,7 +237,7 @@ module.exports = function (webpackEnv) {
 									// `annotation: true` appends the sourceMappingURL to the end of
 									// the css file, helping the browser find the sourcemap
 									annotation: true,
-							  }
+								}
 							: false,
 					},
 					cssProcessorPluginOptions: {
@@ -359,7 +359,8 @@ module.exports = function (webpackEnv) {
 										{
 											loaderMap: {
 												svg: {
-													ReactComponent: '@svgr/webpack?-svgo,+titleProp,+ref![path]',
+													ReactComponent:
+														'@svgr/webpack?-svgo,+titleProp,+ref![path]',
 												},
 											},
 										},
@@ -384,7 +385,12 @@ module.exports = function (webpackEnv) {
 								babelrc: false,
 								configFile: false,
 								compact: false,
-								presets: [[require.resolve('babel-preset-react-app/dependencies'), { helpers: true }]],
+								presets: [
+									[
+										require.resolve('babel-preset-react-app/dependencies'),
+										{ helpers: true },
+									],
+								],
 								cacheDirectory: true,
 								// See #6846 for context on why cacheCompression is disabled
 								cacheCompression: false,
@@ -507,14 +513,16 @@ module.exports = function (webpackEnv) {
 									minifyCSS: true,
 									minifyURLs: true,
 								},
-						  }
+							}
 						: undefined
 				)
 			),
 			// Inlines the webpack runtime script. This script is too small to warrant
 			// a network request.
 			// https://github.com/facebook/create-react-app/issues/5358
-			isEnvProduction && shouldInlineRuntimeChunk && new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime-.+[.]js/]),
+			isEnvProduction &&
+				shouldInlineRuntimeChunk &&
+				new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime-.+[.]js/]),
 			// Makes some environment variables available in index.html.
 			// The public URL is available as %PUBLIC_URL% in index.html, e.g.:
 			// <link rel="icon" href="%PUBLIC_URL%/favicon.ico">
@@ -604,7 +612,9 @@ module.exports = function (webpackEnv) {
 					useTypescriptIncrementalApi: true,
 					checkSyntacticErrors: true,
 					resolveModuleNameModule: process.versions.pnp ? `${__dirname}/pnpTs.js` : undefined,
-					resolveTypeReferenceDirectiveModule: process.versions.pnp ? `${__dirname}/pnpTs.js` : undefined,
+					resolveTypeReferenceDirectiveModule: process.versions.pnp
+						? `${__dirname}/pnpTs.js`
+						: undefined,
 					tsconfig: paths.appTsConfig,
 					reportFiles: [
 						'**',
