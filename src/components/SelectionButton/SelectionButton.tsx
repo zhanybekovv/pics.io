@@ -4,12 +4,11 @@ import './index.css';
 
 const SelectionButton: FC<Props> = (props: Props) => {
 	const { selectedCount, lengthOfWidgets, selectAll, disselectAll } = props;
-	console.log('selectedcount', selectedCount, 'length', lengthOfWidgets);
 	const handleChange = () => {
 		selectedCount === 0 ? selectAll() : disselectAll();
 	};
 	return (
-		<div className='lol'>
+		<div className='widget'>
 			<label
 				style={{
 					display: 'flex',

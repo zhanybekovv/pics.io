@@ -4,23 +4,23 @@ import { Props } from './types';
 // eslint-disable-next-line react/display-name
 const Widget = forwardRef<HTMLInputElement, Props>((props, ref) => {
 	const [checked, setChecked] = useState(props.content.checked);
-
+	const { setSelectedCount, setHist, his, content, edit, index } = props;
 	useEffect(() => {
 		setChecked(props.content.checked);
 	});
 	const handleChange = () => {
 		setChecked(prevState => !prevState);
-		const res = props.content;
+		const res = content;
 		res.checked = !checked;
-		props.his.items[props.index] = res;
-		props.setHist(props.his);
+		his.items[index] = res;
+		setHist(his);
 		!checked
-			? props.setSelectedCount((prevState: number) => prevState + 1)
-			: props.setSelectedCount((prevState: number) => prevState - 1);
+			? setSelectedCount((prevState: number) => prevState + 1)
+			: setSelectedCount((prevState: number) => prevState - 1);
 	};
 	return (
 		<div>
-			{props.edit ? (
+			{edit ? (
 				<div ref={ref} {...props}>
 					<label
 						style={{
@@ -30,15 +30,15 @@ const Widget = forwardRef<HTMLInputElement, Props>((props, ref) => {
 						}}
 					>
 						<input
-							type={props.edit ? 'checkbox' : 'hidden'}
+							type={edit ? 'checkbox' : 'hidden'}
 							defaultChecked={checked}
 							onChange={handleChange}
 							checked={checked}
 						/>
-						{props.content.content}
+						{content.content}
 					</label>
 				</div>
-			) : props.content.checked ? (
+			) : content.checked ? (
 				<div ref={ref} {...props}>
 					<label
 						style={{
@@ -53,7 +53,7 @@ const Widget = forwardRef<HTMLInputElement, Props>((props, ref) => {
 							onChange={handleChange}
 							checked={checked}
 						/>
-						{props.content.content}
+						{content.content}
 					</label>
 				</div>
 			) : null}

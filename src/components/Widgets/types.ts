@@ -1,10 +1,10 @@
-export type Props = {
-	readonly id: string;
-	readonly content: string;
+export type WidgetsProps = {
+	id: string;
+	content: string;
 	checked: boolean;
 };
 
 export type Checked = {
-	checked: boolean;
+	edit: boolean;
 	handleEdit: Function;
 };

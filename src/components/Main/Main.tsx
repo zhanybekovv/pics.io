@@ -1,10 +1,9 @@
 import React, { FC, useState } from 'react';
 import Widgets from '../Widgets';
-import { Props } from './types';
 import Info from '../../public/info-icon.png';
 import './index.css';
 
-const Main: FC<Props> = (props: Props) => {
+const Main: FC = () => {
 	const [show, setShow] = useState(true);
 	const [edit, setEdit] = useState(false);
 	const handleClick = () => {
@@ -31,7 +30,7 @@ const Main: FC<Props> = (props: Props) => {
 					<img src={Info} style={{ width: '100%' }} />
 				</div>
 			</div>
-			{show && <Widgets checked={edit} handleEdit={handleEdit} />}
+			{show && <Widgets edit={edit} handleEdit={handleEdit} />}
 			{show &&
 				(!edit ? (
 					<div
